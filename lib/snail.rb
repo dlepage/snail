@@ -1,4 +1,6 @@
+require 'snail/configurable'
 require 'snail/constants'
+require 'snail_helpers'
 
 class Snail
   include Configurable
@@ -27,6 +29,14 @@ class Snail
     :postcode   => :postal_code
   }.each do |new, existing|
     alias_method "#{new}=", "#{existing}="
+  end
+
+  def self.home_country
+    @home_country ||= "USA"
+  end
+
+  def self.home_country=(val)
+    @home_country = val
   end
   
   def to_s
@@ -61,7 +71,7 @@ class Snail
       "#{postal_code} #{region} #{city}"
     when 'Ireland'
       "#{city}, #{region}"
-    when 'England', 'Scotland', 'Wales', 'United Kingdom', 'Russia', 'Russian Federation', 'Ukraine', 'Jordan', 'Lebanon','Iran, Islamic Republic of', 'Iran', 'Saudi Arabia'
+    when 'England', 'Scotland', 'Wales', 'United Kingdom', 'Russia', 'Russian Federation', 'Ukraine', 'Jordan', 'Lebanon','Iran, Islamic Republic of', 'Iran', 'Saudi Arabia', 'New Zealand'
       "#{city}  #{postal_code}" # Locally these may be on separate lines. The USPS prefers the city line above the country line, though.
     when 'Ecuador'
       "#{postal_code} #{city}"
@@ -82,12 +92,14 @@ class Snail
     when 'Czech Republic'
       "#{postal_code} #{region}\n#{city}"
     else
-      Rails.logger.error "[Snail] Unknown Country: #{country}"
+      if Kernel.const_defined?("Rails")
+        Rails.logger.error "[Snail] Unknown Country: #{country}"
+      end
       "#{city} #{region}  #{postal_code}"
     end
   end
   
   def country_line
-    country == 'USA' ? nil : country.upcase
+    self.class.home_country.to_s.upcase == country.to_s.upcase ? nil : country.to_s.upcase
   end
 end
