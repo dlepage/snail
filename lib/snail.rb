@@ -51,6 +51,8 @@ class Snail
   # currently it's based on the sampling of city line formats from frank's compulsive guide.
   def city_line
     case country
+    when 'Argentina'
+      "#{postal_code}#{region} #{city}"
     when 'China', 'India'
       "#{city}, #{region}  #{postal_code}"
     when 'Brazil'
@@ -67,15 +69,17 @@ class Snail
       "#{postal_code} #{city}"
     when 'Kuwait', 'Syria', 'Oman', 'Estonia','Luxembourg', 'Belgium', 'Iceland', 'Switzerland', 'Austria', 'Moldova', 'Montenegro', 'Serbia', 'Bulgaria', 'Georgia', 'Poland', 'Armenia', 'Croatia', 'Romania', 'Azerbaijan'
       "#{postal_code} #{city}"
-    when 'Netherlands'
+    when 'South Korea', 'Korea', 'Ile Maurice', 'Thailand', 'Indonesia', 'Nigeria', 'Lebanon'
+      "#{city} #{postal_code}"
+    when 'Netherlands', 'Holland'
       "#{postal_code} #{region} #{city}"
     when 'Ireland'
       "#{city}, #{region}"
     when 'England', 'Scotland', 'Wales', 'United Kingdom', 'Russia', 'Russian Federation', 'Ukraine', 'Jordan', 'Lebanon','Iran, Islamic Republic of', 'Iran', 'Saudi Arabia', 'New Zealand'
       "#{city}  #{postal_code}" # Locally these may be on separate lines. The USPS prefers the city line above the country line, though.
-    when 'Ecuador'
+    when 'Ecuador', 'Ile de la Réunion', 'Costa Rica', 'Philippines', 'Honduras', 'Tunisia', 'Morocco', 'Algeria', 'Chile', 'New caledonia', 'Azores islands', 'Azores', 'Zambia'
       "#{postal_code} #{city}"
-    when 'Hong Kong', 'Syria', 'Iraq', 'Yemen', 'Qatar', 'Albania'
+    when 'Hong Kong', 'Syria', 'Iraq', 'Yemen', 'Qatar', 'Albania', 'Turks and Caicos'
       "#{city}"
     when 'United Arab Emirates'
       "#{postal_code}\n#{city}"
@@ -87,10 +91,16 @@ class Snail
       "#{city}, LV-#{postal_code}"
     when 'Lithuania'
       "LT-#{postal_code} #{city}"
+    when 'Malaysia'
+      "#{postal_code} #{city}\n#{region}"
+    when 'Malta'
+      "#{city} #{region} #{postal_code}"
     when 'Slovenia'
       "SI-#{postal_code} #{city}"
     when 'Czech Republic'
       "#{postal_code} #{region}\n#{city}"
+    when 'Trinidad and Tobago'
+      "#{city}\n#{region}"
     else
       if Kernel.const_defined?("Rails")
         Rails.logger.error "[Snail] Unknown Country: #{country}"
